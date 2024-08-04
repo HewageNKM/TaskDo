@@ -1,6 +1,7 @@
 interface Task{
     title: string;
     description: string;
-    dateTime: string;
+    reminder: Date;
+    createdAt: Date;
     status: string;
 }

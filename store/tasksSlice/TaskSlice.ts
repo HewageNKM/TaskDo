@@ -4,9 +4,13 @@ interface TaskSlice{
     tasks: Task[];
     error: any;
 }
+const initialState: TaskSlice = {
+    tasks: [],
+    error: null
+}
 const tasksSlice = createSlice({
     name: 'tasksSlice',
-    initialState: {},
+    initialState,
     reducers: {}
 });
 
