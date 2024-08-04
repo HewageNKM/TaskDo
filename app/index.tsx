@@ -26,7 +26,7 @@ const Index = () => {
     return (
         <SafeAreaView className='h-full'>
             <FlatList ListHeaderComponent={() => (<Header/>)} data={tasks} keyExtractor={(item) => item.id}
-                      renderItem={(item) => (<TaskCard task={item}/>)}
+                      renderItem={(item) => (<TaskCard task={item.item}/>)}
                       ListEmptyComponent={() => (<EmptyState title="No Tasks" subTitle="Create a Task"/>
                       )}
                       refreshing={isFetchingTasks} onRefresh={() => dispatch(getAllTasks({db}))}

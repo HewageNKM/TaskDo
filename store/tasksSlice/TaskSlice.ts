@@ -31,7 +31,7 @@ const tasksSlice = createSlice({
         });
     }
 });
-export const getAllTasks = createAsyncThunk('tasksSlice/fetchTasks', async ({db}: { db: SQLiteDatabase }, thunkAPI) => {
+export const getAllTasks = createAsyncThunk('tasksSlice/fetchTasks', async ({db}: { db: SQLiteDatabase}, thunkAPI) => {
     try {
         const tasks: Task[] = await db.getAllAsync(`SELECT * FROM tasks`);
         console.log(tasks);
@@ -41,10 +41,7 @@ export const getAllTasks = createAsyncThunk('tasksSlice/fetchTasks', async ({db}
     }
 });
 
-export const addTask = createAsyncThunk('tasksSlice/addTask', async ({task, db}: {
-    task: Task,
-    db: SQLiteDatabase
-}, thunkAPI) => {
+export const addTask = createAsyncThunk('tasksSlice/addTask', async ({task,db}:{task:Task,db:SQLiteDatabase}, thunkAPI) => {
     try {
         await db.runAsync('INSERT INTO tasks (title,description,status,reminder,createdAt) VALUES (?,?,?,?,?)', [task.title, task.description, task.status, task.reminder, task.createdAt]);
     } catch (e) {

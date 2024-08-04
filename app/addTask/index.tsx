@@ -4,6 +4,9 @@ import RNDateTimePicker, {DateTimePickerEvent} from "@react-native-community/dat
 import {StatusBar} from "expo-status-bar";
 import {useDispatch} from "react-redux";
 import {AppDispatch} from "@/store/store";
+import {getAllTasks,addTask} from "@/store/tasksSlice/TaskSlice";
+import {useSQLiteContext} from "expo-sqlite";
+import {ID} from "postcss-selector-parser";
 
 const Index = () => {
     const [date, setDate] = useState(new Date());
@@ -11,11 +14,14 @@ const Index = () => {
     const [description, setDescription] = React.useState('');
     const [reminder, setReminder] = React.useState(0);
     const dispatch:AppDispatch = useDispatch();
-    const addTask = () => {
+    const db = useSQLiteContext();
+
+    const createTask = () => {
         if (title.trim() === '' || description.trim() === '') {
             Alert.alert('Error', 'Please fill all fields');
         }
         const task = {
+            id: 0,
             title,
             description,
             reminder,
@@ -23,7 +29,10 @@ const Index = () => {
             status: 'pending'
         };
         console.log(task);
-        dispatch(addTask())
+        dispatch(addTask({task:task,db:db}));
+        dispatch(getAllTasks({db}));
+
+
         setTitle('');
         setDescription('');
         setReminder(0);
@@ -56,7 +65,7 @@ const Index = () => {
                                           textColor="#000000" display="default" mode="datetime" value={date}/>
                     </View>
                 </View>
-                <TouchableOpacity onPress={() => addTask()} activeOpacity={.6} className="mt-5">
+                <TouchableOpacity onPress={() => createTask()} activeOpacity={.6} className="mt-5">
                     <View className="bg-red-500 flex-row flex justify-center items-center p-2 rounded-lg mt-3">
                         <Text className="text-white text-xl font-medium">Add Task</Text>
                     </View>
