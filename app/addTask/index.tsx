@@ -2,19 +2,32 @@ import React, {useState} from 'react';
 import {Alert, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View} from "react-native";
 import RNDateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
 import {StatusBar} from "expo-status-bar";
+import {useDispatch} from "react-redux";
+import {AppDispatch} from "@/store/store";
 
 const Index = () => {
     const [date, setDate] = useState(new Date());
     const [title, setTitle] = React.useState('');
     const [description, setDescription] = React.useState('');
     const [reminder, setReminder] = React.useState(0);
-
+    const dispatch:AppDispatch = useDispatch();
     const addTask = () => {
         if (title.trim() === '' || description.trim() === '') {
             Alert.alert('Error', 'Please fill all fields');
         }
-        console.log(title, description, reminder);
-        // Add Task to Database
+        const task = {
+            title,
+            description,
+            reminder,
+            createdAt: new Date().getTime(),
+            status: 'pending'
+        };
+        console.log(task);
+        dispatch(addTask())
+        setTitle('');
+        setDescription('');
+        setReminder(0);
+        setDate(new Date());
     };
     return (
         <SafeAreaView className="h-full">
