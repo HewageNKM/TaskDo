@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Alert, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View} from "react-native";
 import RNDateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
+import {StatusBar} from "expo-status-bar";
 
 const Index = () => {
     const [date, setDate] = useState(new Date());
@@ -48,6 +49,7 @@ const Index = () => {
                     </View>
                 </TouchableOpacity>
             </ScrollView>
+            <StatusBar animated={true} style="light"/>
         </SafeAreaView>
     );
 };
