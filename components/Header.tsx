@@ -15,7 +15,7 @@ const Header = () => {
                     <EvilIcons name="search" size={28} color="black"/>
                 </TouchableOpacity>
             </View>
-            <View className="flex mt-5 justify-between flex-row items-center">
+            <View className="flex mt-8 justify-between flex-row items-center">
                 <Text className="text-4xl font-bold">Tasks</Text>
                 <Link href="/addTask">
                     <View className='bg-red-500 flex-row flex justify-center items-center p-2 rounded-lg'>
@@ -24,7 +24,7 @@ const Header = () => {
                     </View>
                 </Link>
             </View>
-            <View className="flex relative flex-row justify-start">
+            <View className="flex relative mt-5 flex-row justify-start">
                 <Text className="text-lg font-medium">Filter:</Text>
                 <View className="w-[50vw] left-6 -top-[11.2vh] absolute scale-75">
                     <Picker
