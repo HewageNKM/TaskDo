@@ -24,10 +24,13 @@ const tasksSlice = createSlice({
         }).addCase(getAllTasks.rejected, (state, action) => {
             state.error = action.payload;
             state.isFetchingTasks = false;
-        }).addCase(addTask.fulfilled, (state, action) => {
+        }).addCase(getTasksByStatus.fulfilled, (state, action) => {
+            state.tasks = action.payload;
             state.error = null;
-        }).addCase(addTask.rejected, (state, action) => {
+            state.isFetchingTasks = false;
+        }).addCase(getTasksByStatus.rejected, (state, action) => {
             state.error = action.payload;
+            state.isFetchingTasks = false;
         });
     }
 });
@@ -41,9 +44,40 @@ export const getAllTasks = createAsyncThunk('tasksSlice/fetchTasks', async ({db}
     }
 });
 
+export const getTasksByStatus = createAsyncThunk('tasksSlice/getTasksByStatus', async ({db,status}: { status:string,db: SQLiteDatabase}, thunkAPI) => {
+    try {
+        switch (status){
+            case 'all':
+                return await db.getAllAsync(`SELECT * FROM tasks`);
+            case 'cp':
+                return await db.getAllAsync(`SELECT * FROM tasks WHERE status='Complete'`);
+            case 'ip':
+                return await db.getAllAsync(`SELECT * FROM tasks WHERE status='Incomplete'`);
+        }
+    } catch (e) {
+        return thunkAPI.rejectWithValue(e);
+    }
+});
+
 export const addTask = createAsyncThunk('tasksSlice/addTask', async ({task,db}:{task:Task,db:SQLiteDatabase}, thunkAPI) => {
     try {
         await db.runAsync('INSERT INTO tasks (title,description,status,reminder,createdAt) VALUES (?,?,?,?,?)', [task.title, task.description, task.status, task.reminder, task.createdAt]);
+    } catch (e) {
+        return thunkAPI.rejectWithValue(e);
+    }
+});
+
+export const updateTaskStatusById = createAsyncThunk('tasksSlice/updateTaskStatusById', async ({id,status,db}:{status:string,id:number,db:SQLiteDatabase}, thunkAPI) => {
+    try {
+        await db.runAsync('UPDATE tasks SET status=? WHERE id=?', [status,id]);
+    } catch (e) {
+        return thunkAPI.rejectWithValue(e);
+    }
+});
+
+export const deleteTask = createAsyncThunk('tasksSlice/deleteTask', async ({id,db}:{id:number,db:SQLiteDatabase}, thunkAPI) => {
+    try {
+        await db.runAsync('DELETE FROM tasks WHERE id=?', [id]);
     } catch (e) {
         return thunkAPI.rejectWithValue(e);
     }

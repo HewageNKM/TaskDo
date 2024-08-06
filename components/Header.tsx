@@ -3,9 +3,20 @@ import {Text ,TextInput, TouchableOpacity, View} from "react-native";
 import {EvilIcons} from "@expo/vector-icons";
 import {Link} from "expo-router";
 import {Picker} from "@react-native-picker/picker";
+import {useDispatch} from "react-redux";
+import {AppDispatch} from "@/store/store";
+import { getTasksByStatus } from '@/store/tasksSlice/TaskSlice';
+import {useSQLiteContext} from "expo-sqlite";
 
 const Header = () => {
-    const [selectedValue, setSelectedValue] = useState("cp");
+    const [selectedValue, setSelectedValue] = useState('all');
+    const dispatch:AppDispatch = useDispatch();
+    const db = useSQLiteContext();
+
+    const updateFilter = (itemValue: string, itemIndex: number) => {
+        dispatch(getTasksByStatus({status: itemValue, db}));
+        setSelectedValue(itemValue);
+    }
     return (
         <View className="px-4 py-2 mb-8">
             <View className="flex flex-row relative justify-center items-center">
@@ -29,9 +40,8 @@ const Header = () => {
                 <View className="w-[50vw] left-6 -top-[11.2vh] absolute scale-75">
                     <Picker
                         selectedValue={selectedValue}
-                        onValueChange={(itemValue, itemIndex)=>{
-                            setSelectedValue(itemValue)
-                        }}>
+                        onValueChange={(itemValue, itemIndex)=> updateFilter(itemValue,itemIndex)}>
+                        <Picker.Item label="All" value="all" />
                         <Picker.Item label="Complete" value="cp" />
                         <Picker.Item label="Incomplete" value="in" />
                     </Picker>

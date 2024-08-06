@@ -79,7 +79,7 @@ const Index = () => {
                                     const {type, nativeEvent: {timestamp, utcOffset}} = event;
                                     setReminder(timestamp);
                                     setDate(date);
-                                }} themeVariant="light" minimumDate={date} accentColor="red"
+                                }} themeVariant="light" minimumDate={new Date()} accentColor="red"
                                                   textColor="#000000" display="default" mode="datetime" value={date}/>
                             </View>
                         )
